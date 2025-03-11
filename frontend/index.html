@@ -3,13 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css"> <!-- thêm dòng này -->
-    <title>Khảo sát Nội bộ</title>
+    <title>Khảo sát Siêu PGD</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
-        <h2>Đây là trang web khảo sát nội bộ dành cho các chi nhánh.</h2>
-        <p>Trang này sẽ dùng để người dùng trả lời khảo sát.</p>
+        <h2>Form Khảo sát Siêu PGD</h2>
+
+        <form id="surveyForm">
+            <h3>Cơ sở vật chất, trang thiết bị</h3>
+            <label><input type="checkbox" name="csvc" value="Đầu tư trụ sở mới"> Đầu tư trụ sở mới</label><br>
+            <label><input type="checkbox" name="csvc" value="Áp dụng mô hình sảnh giao dịch chuẩn"> Áp dụng mô hình sảnh giao dịch chuẩn</label><br>
+            <label><input type="checkbox" name="csvc" value="Trang bị máy R-ATM"> Trang bị máy R-ATM</label><br>
+            <label><input type="checkbox" name="csvc" value="Trang bị hệ thống lấy số tự động"> Trang bị hệ thống lấy số tự động</label><br>
+            <label>Ý kiến khác:<br>
+                <textarea name="csvc_khac" rows="2" cols="50"></textarea>
+            </label>
+
+            <h3>Cơ chế chính sách, quy định</h3>
+            <label><input type="checkbox" name="csqd" value="Nâng mức thẩm quyền cấp tín dụng"> Nâng mức thẩm quyền cấp tín dụng</label><br>
+            <label><input type="checkbox" name="csqd" value="Nâng mức thẩm quyền giải ngân"> Nâng mức thẩm quyền giải ngân</label><br>
+            <label><input type="checkbox" name="csqd" value="Nâng hạn mức phê duyệt giao dịch"> Nâng hạn mức phê duyệt giao dịch</label><br>
+            <label>Ý kiến khác:<br>
+                <textarea name="csqd_khac" rows="2" cols="50"></textarea>
+            </label>
+
+            <br><br>
+            <button type="submit">Gửi khảo sát</button>
+        </form>
     </div>
 
     <script src="js/script.js"></script>

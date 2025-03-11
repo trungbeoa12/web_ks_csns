@@ -1,14 +1,24 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import models, schemas, database
 from database import engine, SessionLocal
-from auth import get_password_hash
 
 models.Base.metadata.create_all(bind=engine)
 
+# 🔥 Định nghĩa app ở ĐÂY trước khi thêm middleware
 app = FastAPI()
 
-# Hàm kết nối database
+# ✅ Thêm middleware CORS đúng chỗ, ngay sau khi khởi tạo app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cho phép tất cả frontend kết nối
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 🔥 Hàm kết nối database
 def get_db():
     db = SessionLocal()
     try:
@@ -16,22 +26,14 @@ def get_db():
     finally:
         db.close()
 
-# Route đơn giản để test API hoạt động
+# 🔥 Route test API
 @app.get("/")
 def read_root():
-    return {"Hello": "Khảo sát Project"}
+    return {"message": "Khảo sát Project đang chạy"}
 
-# Tạo nhanh một user admin để test
-@app.post("/create_admin/", response_model=schemas.UserResponse)
-def create_admin(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = models.User(
-        username=user.username,
-        password_hash=get_password_hash(user.password),
-        role=user.role,
-        branch_id=user.branch_id,
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+# 🔥 API nhận dữ liệu khảo sát từ frontend
+@app.post("/submit_survey/")
+async def submit_survey(survey_data: dict):
+    print("Dữ liệu nhận được:", survey_data)  # Debug log
+    return {"message": "Khảo sát đã được ghi nhận!", "data": survey_data}
 
