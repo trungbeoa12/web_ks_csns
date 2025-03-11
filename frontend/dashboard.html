@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Khảo sát</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard Khảo sát</h2>
+        <canvas id="surveyChart"></canvas>
+        <h3>Ý kiến khác:</h3>
+        <ul id="opinions"></ul>
+        <button onclick="downloadExcel()">Tải Excel</button>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            const response = await fetch("http://127.0.0.1:8000/dashboard_data/");
+            const data = await response.json();
+
+            const labels = ["Q1", "Q2", "Q3", "Q4", "Q6", "Q7", "Q8", "Q9", "Q10"];
+            const values = [data.q1, data.q2, data.q3, data.q4, data.q6, data.q7, data.q8, data.q9, data.q10];
+
+            const ctx = document.getElementById("surveyChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Số lần được chọn",
+                        data: values,
+                        backgroundColor: "blue"
+                    }]
+                }
+            });
+
+            const opinions = [...data.q5, ...data.q11];
+            const opinionsList = document.getElementById("opinions");
+            opinions.forEach(op => {
+                let li = document.createElement("li");
+                li.textContent = op;
+                opinionsList.appendChild(li);
+            });
+        }
+
+        function downloadExcel() {
+            window.location.href = "http://127.0.0.1:8000/export_excel/";
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>
+
