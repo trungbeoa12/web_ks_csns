@@ -10,6 +10,8 @@
 <body>
     <div class="container">
         <h2>Dashboard Khảo sát</h2>
+        <p><strong>Người dùng:</strong> <span id="username"></span></p>
+        <p><strong>Vai trò:</strong> <span id="role"></span></p>
         <canvas id="surveyChart"></canvas>
         <h3>Ý kiến khác:</h3>
         <ul id="opinions"></ul>
@@ -17,10 +19,22 @@
     </div>
 
     <script>
+        const user = JSON.parse(localStorage.getItem("user"));
+        
+        if (!user || user.role !== "admin") {
+            window.location.href = "index.html"; // Quay lại đăng nhập nếu không phải admin
+        }
+
+        document.getElementById("username").innerText = user.username;
+        document.getElementById("role").innerText = user.role;
+
         async function loadDashboard() {
             const response = await fetch("http://127.0.0.1:8000/dashboard_data/");
             const data = await response.json();
+            renderChart(data);
+        }
 
+        function renderChart(data) {
             const labels = ["Q1", "Q2", "Q3", "Q4", "Q6", "Q7", "Q8", "Q9", "Q10"];
             const values = [data.q1, data.q2, data.q3, data.q4, data.q6, data.q7, data.q8, data.q9, data.q10];
 
@@ -39,6 +53,7 @@
 
             const opinions = [...data.q5, ...data.q11];
             const opinionsList = document.getElementById("opinions");
+            opinionsList.innerHTML = "";
             opinions.forEach(op => {
                 let li = document.createElement("li");
                 li.textContent = op;

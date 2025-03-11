@@ -3,34 +3,38 @@ from sqlalchemy.orm import relationship
 from database import Base
 import datetime
 
-# Bảng chứa thông tin các Chi nhánh
+# 🔥 Bảng chứa thông tin các Chi nhánh
 class Branch(Base):
     __tablename__ = "branches"
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
 
-    users = relationship("User", back_populates="branch")
-    surveys = relationship("SurveyResponse", back_populates="branch")
+    # Quan hệ 1-n với User
+    users = relationship("User", back_populates="branch", cascade="all, delete-orphan")
+    # Quan hệ 1-n với SurveyResponse
+    surveys = relationship("SurveyResponse", back_populates="branch", cascade="all, delete-orphan")
 
-# Bảng chứa thông tin các user đăng nhập (Admin và Chi nhánh)
+# 🔥 Bảng chứa thông tin các user đăng nhập (Admin và Chi nhánh)
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
-    password_hash = Column(String)
+    password_hash = Column(String)  # Mật khẩu đã hash
+    plain_password = Column(String, nullable=True)  # 🚨 Lưu mật khẩu gốc (Chỉ dùng để dễ quản lý)
     role = Column(String, default="branch")  # "admin" hoặc "branch"
-    branch_id = Column(Integer, ForeignKey("branches.id"))
+    branch_id = Column(Integer, ForeignKey("branches.id", ondelete="CASCADE"), nullable=True)
 
+    # Quan hệ với Branch
     branch = relationship("Branch", back_populates="users")
 
-# Bảng chứa kết quả khảo sát
+# 🔥 Bảng chứa kết quả khảo sát
 class SurveyResponse(Base):
     __tablename__ = "survey_responses"
 
     id = Column(Integer, primary_key=True, index=True)
-    branch_id = Column(Integer, ForeignKey("branches.id"))
+    branch_id = Column(Integer, ForeignKey("branches.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     # Lưu các câu trả lời dạng tích chọn (checkbox)
@@ -60,5 +64,6 @@ class SurveyResponse(Base):
     other_banks_info = Column(String, nullable=True)
     other_comments = Column(String, nullable=True)
 
+    # Quan hệ với Branch
     branch = relationship("Branch", back_populates="surveys")
 

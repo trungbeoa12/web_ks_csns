@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khảo sát Siêu PGD</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Form Khảo sát Siêu PGD</h2>
+        <p><strong>Chi nhánh:</strong> <span id="branch_id"></span></p>
+
+        <form id="surveyForm">
+            <h3>Cơ sở vật chất, trang thiết bị</h3>
+            <label><input type="checkbox" name="csvc" value="Đầu tư trụ sở mới"> Đầu tư trụ sở mới</label><br>
+            <label><input type="checkbox" name="csvc" value="Áp dụng mô hình sảnh giao dịch chuẩn"> Áp dụng mô hình sảnh giao dịch chuẩn</label><br>
+            <label><input type="checkbox" name="csvc" value="Trang bị máy R-ATM"> Trang bị máy R-ATM</label><br>
+            <label><input type="checkbox" name="csvc" value="Trang bị hệ thống lấy số tự động"> Trang bị hệ thống lấy số tự động</label><br>
+            <label>Ý kiến khác:<br>
+                <textarea name="csvc_khac" rows="2" cols="50"></textarea>
+            </label>
+
+            <h3>Cơ chế chính sách, quy định</h3>
+            <label><input type="checkbox" name="csqd" value="Nâng mức thẩm quyền cấp tín dụng"> Nâng mức thẩm quyền cấp tín dụng</label><br>
+            <label><input type="checkbox" name="csqd" value="Nâng mức thẩm quyền giải ngân"> Nâng mức thẩm quyền giải ngân</label><br>
+            <label><input type="checkbox" name="csqd" value="Nâng hạn mức phê duyệt giao dịch"> Nâng hạn mức phê duyệt giao dịch</label><br>
+            <label>Ý kiến khác:<br>
+                <textarea name="csqd_khac" rows="2" cols="50"></textarea>
+            </label>
+
+            <br><br>
+            <button type="submit">Gửi khảo sát</button>
+        </form>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem("user"));
+        
+        if (!user || user.role !== "branch") {
+            window.location.href = "index.html"; // Quay lại đăng nhập nếu không phải chi nhánh
+        }
+
+        document.getElementById("branch_id").innerText = user.branch_id;
+    </script>
+</body>
+</html>
+
